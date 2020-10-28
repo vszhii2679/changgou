@@ -1,0 +1,33 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: changgou-service-goods
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.200.128:3306/changgou_goods?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8888/eureka
+# 开启feign接口
+feign:
+  hystrix:
+    enabled: true
+hystrix:
+  command:
+    default:
+      #如果enabled设置为false，则请求超时交给ribbon控制
+      timeout:
+        enable: true
+      isolation:
+        strategy: SEMAPHORE
+pagehelper:
+  helper-dialect: mysql
+logging:
+  level:
+    com.changgou: debug
