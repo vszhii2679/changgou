@@ -85,4 +85,11 @@ public class BrandController {
     public PageResult<Brand> queryPageByQueryString(Brand brand, @PathVariable("currentPage") int currentPage, @PathVariable("pageSize") int pageSize) {
         return brandService.queryPageByQueryString(brand, currentPage, pageSize);
     }
+
+    //按分类查询
+    @ApiOperation(value = "根据分类查询")
+    @GetMapping("/findListByCategoryName/{categoryName}")
+    public Result findListByCategoryName(@PathVariable("categoryName") String categoryName){
+        return brandService.findListByCategoryName(categoryName);
+    }
 }

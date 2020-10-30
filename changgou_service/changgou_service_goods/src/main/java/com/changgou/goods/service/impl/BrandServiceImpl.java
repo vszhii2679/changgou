@@ -106,6 +106,16 @@ public class BrandServiceImpl implements BrandService {
         return null;
     }
 
+
+    @Override
+    public Result findListByCategoryName(String categoryName) {
+        List<Brand> brandList = brandMapper.findListByCategoryName(categoryName);
+        if (brandList != null && brandList.size() > 0) {
+            return new Result(true, StatusCode.OK, "查询成功", brandList);
+        }
+        return new Result(false, StatusCode.ERROR, "查无此信息");
+    }
+
     /*
         品牌业务用：获取条件对象
      */
@@ -129,4 +139,6 @@ public class BrandServiceImpl implements BrandService {
         }
         return example;
     }
+
+
 }

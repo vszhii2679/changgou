@@ -3,6 +3,9 @@ package com.changgou.goods.service;
 import com.changgou.entity.PageResult;
 import com.changgou.entity.Result;
 import com.changgou.goods.pojo.Brand;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface BrandService {
 
@@ -69,5 +72,13 @@ public interface BrandService {
      * @return
      */
     PageResult<Brand> queryPageByQueryString(Brand brand,int currentPage, int pageSize);
+
+
+    /**
+     * 根据分类名查询品牌集合
+     * @param categoryName
+     * @return
+     */
+    Result findListByCategoryName(@Param("name") String categoryName);
 
 }
