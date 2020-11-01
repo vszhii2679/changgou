@@ -31,7 +31,7 @@ public class BrandController {
         return brandService.findAll();
     }
 
-    //根据id查询
+    //根据id查询·
     @ApiOperation(value = "根据id查询品牌")
     @ApiImplicitParam(name = "id", required = true, value = "主键id")
     @GetMapping("/findById/{id}")

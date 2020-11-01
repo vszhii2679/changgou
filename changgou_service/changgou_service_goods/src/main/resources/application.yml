@@ -31,3 +31,8 @@ pagehelper:
 logging:
   level:
     com.changgou: debug
+
+
+idWorker:
+  workerId: 0
+  datacenterId: 0
