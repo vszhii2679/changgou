@@ -1,8 +1,13 @@
 server:
   port: 9004
 spring:
+  #rabbitmq的配置信息
+  rabbitmq:
+    host: 192.168.200.128
+    port: 5672
   application:
-    name: business
+    name: changgou-service-business
+  #数据库的配置信息
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.200.128:3306/changgou_business?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
@@ -10,12 +15,14 @@ spring:
     password: root
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+#eureka注册中心的配置信息
 eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:8888/eureka
   instance:
     prefer-ip-address: true
+#feign以及熔断器的配置
 feign:
   hystrix:
     enabled: true
