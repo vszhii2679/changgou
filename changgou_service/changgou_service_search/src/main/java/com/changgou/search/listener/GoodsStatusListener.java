@@ -15,12 +15,14 @@ public class GoodsStatusListener {
 
     @RabbitListener(queues = RabbitmqConfig.GOODS_UP_QUEUE)
     public void goodsUp(String spuId){
+        System.out.println("【监听到rabbitmq中商品上架队列的信息】");
         System.out.println("spuId = " + spuId);
         es5Service.importBySpuId(spuId);
     }
 
     @RabbitListener(queues = RabbitmqConfig.GOODS_DOWN_QUEUE)
     public void goodsDown(String spuId){
+        System.out.println("【监听到rabbitmq中商品下架队列的信息】");
         System.out.println("spuId = " + spuId);
         es5Service.downBySpuId(spuId);
     }

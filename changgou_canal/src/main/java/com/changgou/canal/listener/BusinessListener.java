@@ -24,7 +24,7 @@ public class BusinessListener {
     //@ListenPoint 监听点->数据库及数据表
     @ListenPoint(schema = "changgou_business",table = "tb_ad")
     public void adUpdate(CanalEntry.EventType eventType,CanalEntry.RowData rowData){
-        System.out.println("canal监听到数据预热信息");
+        System.out.println("【canal监听到数据预热信息】");
         //获取数据库表变化前行信息
         List<CanalEntry.Column> beforeColumnsList = rowData.getBeforeColumnsList();
         //获取数据库表变化后行信息,List对应的是数据库中一行的信息

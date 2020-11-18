@@ -14,7 +14,8 @@ public class RabbitmqConfig {
     public static final String GOODS_UP_QUEUE = "goods_up_queue";
     //商品下架队列名
     public static final String GOODS_DOWN_QUEUE = "goods_down_queue";
-
+    //页面静态化队列名
+    public static final String PAGE_CREATE_QUEUE = "page_create_queue";
 
     //商品上架交换机
     public static final String GOODS_UP_EXCHANGE = "goods_up_exchange";
@@ -39,6 +40,11 @@ public class RabbitmqConfig {
         return new Queue(GOODS_DOWN_QUEUE);
     }
 
+    //页面静态化队列
+    @Bean("pageCreateQueue")
+    public Queue pageCreateQueue(){
+        return new Queue(PAGE_CREATE_QUEUE);
+    }
 
     //商品上架交换机
     @Bean("goodsUpExchange")
@@ -66,6 +72,14 @@ public class RabbitmqConfig {
     //商品下架交换机绑定下架队列
     @Bean
     public Binding goodsDown(@Qualifier("goodsDownExchange")Exchange exchange,@Qualifier("goodsDownQueue")Queue queue){
+        //广播模式不使用路由key
+        return BindingBuilder.bind(queue).to(exchange).with("").noargs();
+    }
+
+
+    //商品上架交换机绑定页面静态化队列
+    @Bean
+    public Binding pageCreate(@Qualifier("goodsUpExchange")Exchange exchange,@Qualifier("pageCreateQueue")Queue queue){
         //广播模式不使用路由key
         return BindingBuilder.bind(queue).to(exchange).with("").noargs();
     }

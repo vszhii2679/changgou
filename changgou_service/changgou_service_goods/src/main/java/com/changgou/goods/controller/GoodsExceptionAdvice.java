@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /*
-    全局异常处理类
+    全局异常处理类：
+    使用fescar方案解决分布式事务时出现的异常
+    不需要通过全局异常类进行处理，通过TC调用全局GlobalTransactional注解配置的分布式事务回滚事务
  */
 
 @ResponseBody

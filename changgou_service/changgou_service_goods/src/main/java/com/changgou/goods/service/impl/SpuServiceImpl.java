@@ -1,6 +1,7 @@
 package com.changgou.goods.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.changgou.entity.Result;
 import com.changgou.goods.mapper.*;
 import com.changgou.goods.pojo.*;
 import com.changgou.goods.service.SkuService;
@@ -126,6 +127,11 @@ public class SpuServiceImpl implements SpuService {
         goods.setSpu(spu);
         goods.setSkuList(skuList);
         return goods;
+    }
+
+    @Override
+    public Spu findSpuById(String id) {
+        return spuMapper.selectByPrimaryKey(id);
     }
 
     @Transactional

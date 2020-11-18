@@ -3,6 +3,7 @@ package com.changgou.goods.controller;
 import com.changgou.entity.Result;
 import com.changgou.entity.StatusCode;
 import com.changgou.goods.pojo.Goods;
+import com.changgou.goods.pojo.Spu;
 import com.changgou.goods.service.SpuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,14 @@ public class SpuController {
     public Result findById(@PathVariable("id") String id) {
         Goods goods = spuService.findById(id);
         return new Result(true, StatusCode.OK, "商品查询成功", goods);
+    }
+
+    //根据id查询商品
+    @GetMapping("/findSpuById/{id}")
+    public Result findSpuById(@PathVariable("id") String id) {
+        //spuService
+        Spu spu = spuService.findSpuById(id);
+        return new Result(true, StatusCode.OK, "spu查询成功", spu);
     }
 
     //根据id编辑商品信息

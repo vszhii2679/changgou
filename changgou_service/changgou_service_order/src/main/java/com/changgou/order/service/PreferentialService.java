@@ -63,7 +63,4 @@ public interface PreferentialService {
      */
     Page<Preferential> findPage(Map<String, Object> searchMap, int page, int size);
 
-
-
-
 }

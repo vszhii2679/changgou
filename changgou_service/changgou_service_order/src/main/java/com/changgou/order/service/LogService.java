@@ -1,6 +1,6 @@
 package com.changgou.order.service;
 
-import com.changgou.order.pojo.Log;
+import com.changgou.goods.pojo.Log;
 import com.github.pagehelper.Page;
 
 import java.util.List;

@@ -1,8 +1,14 @@
 package com.changgou.goods.service;
 
 import com.changgou.goods.pojo.Goods;
+import com.changgou.goods.pojo.Spu;
 
 public interface SpuService {
+    /**
+     * 根据id查询spu
+     * @param id
+     */
+    Spu findSpuById(String id);
     /**
      * 添加商品：包括spu和sku
      * @param goods

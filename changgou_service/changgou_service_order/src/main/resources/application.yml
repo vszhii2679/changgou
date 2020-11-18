@@ -2,14 +2,20 @@ server:
   port: 9002
 spring:
   application:
-    name: order
+    name: changgou-service-order
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.200.128:3306/changgou_order?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: root
+
   main:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+  redis:
+    host: 192.168.200.128
+    port: 6379
+  rabbitmq:
+    host: 192.168.200.128
 eureka:
   client:
     service-url:
@@ -37,3 +43,7 @@ hystrix:
           thread:
             # 熔断器超时时间，默认：1000/毫秒
             timeoutInMilliseconds: 20000
+#开启驼峰
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

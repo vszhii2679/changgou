@@ -10,6 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>changgou_web</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>changgou_web_order</module>
+        <module>changgou_web_seckill</module>
+    </modules>
 
 
 </project>

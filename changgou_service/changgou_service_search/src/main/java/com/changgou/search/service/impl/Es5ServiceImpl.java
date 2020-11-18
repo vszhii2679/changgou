@@ -36,12 +36,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class Es5ServiceImpl implements Es5Service {
@@ -141,23 +137,23 @@ public class Es5ServiceImpl implements Es5Service {
             boolQuery.filter(QueryBuilders.rangeQuery("price").gte(prices[0]));
         }
         //5.5、设置条件：分页
-        int currentPage = 1;
-        int pageSize = 50;
+        int pageNum = 1;
+        int pageSize = 20;
         //如果未设置分页设置，设置默认值 第一页、如果有值则从queryMap中获取
-        if (!StringUtils.isEmpty(queryMap.get("currentPage"))) {
-            currentPage = Integer.parseInt(queryMap.get("currentPage"));
+        if (!StringUtils.isEmpty(queryMap.get("pageNum"))) {
+            pageNum = Integer.parseInt(queryMap.get("pageNum"));
         }
         if (!StringUtils.isEmpty(queryMap.get("pageSize"))) {
             pageSize = Integer.parseInt(queryMap.get("pageSize"));
         }
         //page从第0页开始
-        Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize);
         nativeSearchQueryBuilder.withPageable(pageable);
         //5.6、设置聚合：size可以设置聚合的最大容量，默认为10个
         //5.6.1、品牌聚合查询，terms("brand")中的参数与skuInfos.getAggregation("brand")参数要一致
-        nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("brand").field(brandName).size(20));
+        nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("brand").field(brandName).size(18));
         //5.6.2、规格聚合查询
-        nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("spec").field("spec.keyword").size(20));
+        nativeSearchQueryBuilder.addAggregation(AggregationBuilders.terms("spec").field("spec.keyword").size(10));
         //5.7、设置条件：排序
         if(!StringUtils.isEmpty("sortField")){
             if("asc".equals(queryMap.get("sortMode"))){
@@ -223,7 +219,7 @@ public class Es5ServiceImpl implements Es5Service {
         resultMap.put("total", skuInfos.getTotalElements());
         resultMap.put("skuList", skuInfos.getContent());
         resultMap.put("totalPage", skuInfos.getTotalPages());
-        resultMap.put("currentPage",currentPage);
+        resultMap.put("pageNum",pageNum);
         resultMap.put("pageSize",pageSize);
         //6.1、设置聚合的结果
         //getAggregation是AggregationBuilders.terms("brand")设置的brand字符串
@@ -237,8 +233,10 @@ public class Es5ServiceImpl implements Es5Service {
         List<String> specList = specAggregation.getBuckets().stream()
                 .map(bucket -> bucket.getKeyAsString())
                 .collect(Collectors.toList());
+        //调用私有方法，转换specList数据结构
+        Map<String, Set<String>> specMap = transJson2Set(specList);
         resultMap.put("brandList",brandList);
-        resultMap.put("specList",specList);
+        resultMap.put("specMap",specMap);
         return resultMap;
     }
 
@@ -265,5 +263,37 @@ public class Es5ServiceImpl implements Es5Service {
             skuInfo.setSpecMap(map);
         }
         return skuInfos;
+    }
+
+
+    /**
+     * 将List 转成 Map [{A:B,D:F},{A:C}]--->{A:[B,C]},{D:[F]}
+     * @param specList
+     * @return
+     */
+    private Map<String, Set<String>> transJson2Set(List<String> specList){
+        //断言：当参数不为null且参数size大于0时向下执行
+        assert specList!=null && specList.size()>0;
+        //创建返回对象
+        Map<String, Set<String>> specMap = new HashMap();
+        //遍历list----[{A:B,D:F},{A:C}]，操作{A:B}
+        for (String specJson : specList) {
+            //将每一个{A:B}转成Map键值对
+            Map<String,String> jsonMap = JSON.parseObject(specJson, Map.class);
+            //遍历键,内循环完成时候，将key和Set集合存入specMap中
+            for (String jsonKey : jsonMap.keySet()) {
+                //获取/创建Set集合，用来去重复的value
+                Set<String> jsonSet = specMap.get(jsonKey);
+                //如果Map中无此Set集合则创建
+                if (jsonSet==null){
+                    jsonSet=new HashSet<>();
+                }
+                //将每个value存入Set集合中
+                jsonSet.add(jsonMap.get(jsonKey));
+                //将key和Set集合存入结果specMap中
+                specMap.put(jsonKey,jsonSet);
+            }
+        }
+        return specMap;
     }
 }
